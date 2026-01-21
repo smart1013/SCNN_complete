@@ -44,7 +44,7 @@ namespace Scnn {
             int bank_id = get_bank_id(std::get<0>(psum.addr), std::get<1>(psum.addr), std::get<2>(psum.addr));
 
             // Move the element into the queue if the queue is not full
-            if (queues[bank_id].size() < queue_depth) {
+            if (queues[bank_id].size() < (size_t)queue_depth) {
                 queues[bank_id].push_back(psum);
 
                 // remove from the input batch

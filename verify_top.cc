@@ -27,7 +27,7 @@ void compute_golden_output(Scnn::Tensor& IA, const std::vector<Scnn::Tensor*>& F
     int out_h = Golden_OA.dims.h;
     int out_w = Golden_OA.dims.w;
 
-    std::cout << "Calculating Golden Reference..." << std::endl;
+    std::cout << "Calculating Reference..." << std::endl;
 
     for (int k = 0; k < K; ++k) {
         for (int y = 0; y < out_h; ++y) {
@@ -77,7 +77,7 @@ int main() {
     Scnn::TensorDims input_dims = {Scnn::LayerConfig::C, Scnn::LayerConfig::H, Scnn::LayerConfig::W};
     Scnn::Tensor IA(input_dims);
     // Random Init
-    for (int i = 0; i < IA.data.size(); ++i) {
+    for (size_t i = 0; i < IA.data.size(); ++i) {
         IA.data[i] = (rand() % 100 < 30) ? (float)(rand() % 5 + 1) : 0.0f; // 30% density
     }
 
@@ -86,7 +86,7 @@ int main() {
     for (int k = 0; k < Scnn::LayerConfig::K; ++k) {
         Scnn::Tensor* filter = new Scnn::Tensor(filter_dims);
         // Random Init
-        for (int i = 0; i < filter->data.size(); ++i) {
+        for (size_t i = 0; i < filter->data.size(); ++i) {
             filter->data[i] = (rand() % 100 < 30) ? (float)(rand() % 5 + 1) : 0.0f; // 30% density
         }
         FW.push_back(filter);
@@ -145,7 +145,7 @@ int main() {
     int errors = 0;
     float epsilon = 1e-4; // Tolerance for floating point
 
-    for (int i = 0; i < Sim_OA.data.size(); ++i) {
+    for (size_t i = 0; i < Sim_OA.data.size(); ++i) {
         float sim_val = Sim_OA.data[i];
         float gold_val = Golden_OA.data[i];
 

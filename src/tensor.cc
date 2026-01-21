@@ -32,7 +32,7 @@ namespace Scnn {
     }
 
     float Tensor::get_value(int c, int h, int w) {
-        int index = get_index(c, h, w);
+        size_t index = get_index(c, h, w);
         assert(index <= data.size());
         return data[index];
     }
@@ -103,8 +103,8 @@ namespace Scnn {
         // }
 
         // Fill data
-        int limit = std::min(values.size(), data.size());
-        for(int i=0; i<limit; ++i) {
+        size_t limit = std::min(values.size(), data.size());
+        for (size_t i = 0; i < limit; i++) {
             data[i] = values[i];
         }
         // Recalculate sparsity/non-zeros

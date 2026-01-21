@@ -23,7 +23,7 @@ namespace Scnn {
         // buffer.resize(tensor.non_zero_count);
         this->size = tensor.non_zero_count;
 
-        for (int i = 0; i < tensor.data.size(); i++) {
+        for (size_t i = 0; i < tensor.data.size(); i++) {
             std::tuple<int, int, int> addr = tensor.get_addr(i);
             int c, h, w;
             std::tie(c, h, w) = addr;
@@ -39,7 +39,7 @@ namespace Scnn {
 
 
     void Input_Buffer::print() {
-        for (int i = 0; i < buffer.size(); i++) {
+        for (size_t i = 0; i < buffer.size(); i++) {
             std::tuple<int, int, int> addr = buffer[i].addr;
             int c, h, w;
             std::tie(c, h, w) = addr;
@@ -78,7 +78,7 @@ namespace Scnn {
 
 
     void Weight_Buffer::print() {
-        for (int i = 0; i < buffer.size(); i++) {
+        for (size_t i = 0; i < buffer.size(); i++) {
             std::tuple<int, int, int, int> addr = buffer[i].addr;
             int k, c, r, s;
             std::tie(k, c, r, s) = addr;
@@ -116,7 +116,7 @@ namespace Scnn {
         int w_chunk = (tensor.dims.w + grid_dim - 1) / grid_dim;
         
         // 3. Iterate through every pixel in global tensor
-        for (int i = 0; i < tensor.data.size(); ++i) {
+        for (size_t i = 0; i < tensor.data.size(); ++i) {
             float val = tensor.data[i];
             if (val == 0.0) continue; // Skip zeros (SCNN optimization)
             
