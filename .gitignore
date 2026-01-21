@@ -1,0 +1,20 @@
+
+# Executables
+top
+verify_top
+check_conv
+test
+
+# Object files
+*.o
+
+# Libraries
+*.a
+*.so
+
+# Debug
+*.dSYM
+
+# Temporary files
+*.swp
+*~

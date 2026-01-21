@@ -1,8 +1,6 @@
-
 #include "tensor.h"
 #include "loader.h"
 #include "convlayer.h"
-#include "pe.h"
 #include "dispatcher.h"
 #include "mult_array.h"
 #include "buffer_queue.h"
