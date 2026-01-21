@@ -30,6 +30,10 @@ int main() {
                 loader.load_IA(conv_layer.IA, c);
                 loader.Load_FW(conv_layer.FW, k, k + Scnn::HardwareConfig::FILTERS_PER_GROUP, c);
 
+                // For parallel cycle calculation
+                int max_cycles = 0;
+                std::vector<int> pe_cycles(Scnn::HardwareConfig::NUM_PE, 0);
+
                 /**************************************************************/
                 for (int pe_num = 0; pe_num < Scnn::HardwareConfig::NUM_PE; pe_num++) {
 
@@ -46,6 +50,7 @@ int main() {
                     while (!dispatcher.finished || dispatcher.output_valid || mult_array.has_output() || !buffer_queue.is_empty()) {
 
                         cycle++;
+                        pe_cycles[pe_num]++;
 
                         accumulator.Cycle(&buffer_queue, &conv_layer.OA);
                         mult_array.Cycle(&dispatcher, &buffer_queue, &conv_layer.OA);
@@ -55,10 +60,31 @@ int main() {
                     total_idle_count += mult_array.idle_count;
                     total_count += mult_array.total_mults_count;
                     total_idle_cycle += mult_array.idle_cycle;
+
+                    if (pe_cycles[pe_num] > max_cycles) {
+                        max_cycles = pe_cycles[pe_num];
+                    }
                 }
                 /**************************************************************/
+
+                // calculate barrier cycles
+                // IDK!!!!!!!!!!!!
+
+                for (int cyc : pe_cycles) {
+                    int barrier_cycle = max_cycles - cyc;
+                    cycle += barrier_cycle;
+                    total_idle_cycle += barrier_cycle;
+                    total_idle_count += barrier_cycle * Scnn::HardwareConfig::NUM_MULTIPLIERS;
+                    total_count += barrier_cycle * Scnn::HardwareConfig::NUM_MULTIPLIERS;
+                }
+
+
             }
         }
+
+        conv_layer.OA.print();
+
+        std::cout << "\n" << std::endl;
         
         std::cout << "Total cycles:" << "\t" << cycle << std::endl;
         std::cout << "Idle cycles:" << "\t" << total_idle_cycle << std::endl;

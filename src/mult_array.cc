@@ -150,6 +150,8 @@ namespace Scnn {
 
             if (!int_latch.empty()) {
                 // stall if there are still outputs to be pushed
+                idle_count += Scnn::HardwareConfig::NUM_MULTIPLIERS;
+                total_mults_count += Scnn::HardwareConfig::NUM_MULTIPLIERS;
                 idle_cycle++;
                 return;
             }
