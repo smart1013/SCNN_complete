@@ -73,32 +73,16 @@ void compute_golden_output(Scnn::Tensor& IA, const std::vector<Scnn::Tensor*>& F
 int main() {
     std::cout << "=== Verification Start ===" << std::endl;
 
-    // 1. Initialize Tensors (Same as top.cc)
-    Scnn::TensorDims input_dims = {Scnn::LayerConfig::C, Scnn::LayerConfig::H, Scnn::LayerConfig::W};
-    Scnn::Tensor IA(input_dims);
-    // Random Init
-    for (size_t i = 0; i < IA.data.size(); ++i) {
-        IA.data[i] = (rand() % 100 < 30) ? (float)(rand() % 5 + 1) : 0.0f; // 30% density
-    }
+    // 1. Initialize ConvLayer (contains IA, FW, OA)
+    Scnn::ConvLayer conv_layer;
+    conv_layer.initialize();
 
-    Scnn::TensorDims filter_dims = {Scnn::LayerConfig::C, Scnn::LayerConfig::R, Scnn::LayerConfig::S};
-    std::vector<Scnn::Tensor*> FW;
-    for (int k = 0; k < Scnn::LayerConfig::K; ++k) {
-        Scnn::Tensor* filter = new Scnn::Tensor(filter_dims);
-        // Random Init
-        for (size_t i = 0; i < filter->data.size(); ++i) {
-            filter->data[i] = (rand() % 100 < 30) ? (float)(rand() % 5 + 1) : 0.0f; // 30% density
-        }
-        FW.push_back(filter);
-    }
-
-    // 2. Initialize Sim Output and Golden Output
-    int out_h = (Scnn::LayerConfig::H + 2 * Scnn::LayerConfig::PADDING - Scnn::LayerConfig::DILATION * (Scnn::LayerConfig::R - 1) - 1) / Scnn::LayerConfig::STRIDE + 1;
-    int out_w = (Scnn::LayerConfig::W + 2 * Scnn::LayerConfig::PADDING - Scnn::LayerConfig::DILATION * (Scnn::LayerConfig::S - 1) - 1) / Scnn::LayerConfig::STRIDE + 1;
-    Scnn::TensorDims out_dims = {Scnn::LayerConfig::K, out_h, out_w};
+    Scnn::Tensor& IA = conv_layer.IA;
+    std::vector<Scnn::Tensor*>& FW = conv_layer.FW;
+    Scnn::Tensor& Sim_OA = conv_layer.OA;
     
-    Scnn::Tensor Sim_OA(out_dims);
-    Scnn::Tensor Golden_OA(out_dims);
+    // Golden Output needs its own tensor based on instantiated dimensions
+    Scnn::Tensor Golden_OA(Sim_OA.dims);
 
     // 3. Run Golden Model
     compute_golden_output(IA, FW, Golden_OA);
@@ -165,8 +149,7 @@ int main() {
         std::cout << "VERIFICATION FAILED! Total Mismatches: " << errors << std::endl;
     }
 
-    // Cleanup
-    for(auto t : FW) delete t;
+    // Cleanup managed by ConvLayer destructor
 
     return 0;
 }
