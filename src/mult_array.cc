@@ -159,11 +159,19 @@ namespace Scnn {
         
         // stall if there are no inputs to be processed
         if (!dispatcher->is_output_valid()) {
+            // idle_count += Scnn::HardwareConfig::NUM_MULTIPLIERS;
+            // total_mults_count += Scnn::HardwareConfig::NUM_MULTIPLIERS;
             idle_cycle++;
             return;
         } 
 
         auto [ia_vector, w_vector] = dispatcher->pop_data();
+
+        int ia_vec_size = ia_vector.size();
+        int w_vec_size = w_vector.size();
+
+        idle_count += Scnn::HardwareConfig::NUM_MULTIPLIERS - (ia_vec_size * w_vec_size);
+        
         idle_count += cartesian_product(ia_vector, w_vector, output_tensor);
         total_mults_count += Scnn::HardwareConfig::NUM_MULTIPLIERS;
 
