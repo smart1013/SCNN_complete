@@ -33,24 +33,24 @@ struct HardwareConfig{
 
 // Layer (CNN) Configuration
 struct LayerConfig {
-    static const int C = 512;
-    static const int H = 14;
-    static const int W = 14;
-    static const int S = 3;
-    static const int R = 3;
-    static const int K = 512;
+    static const int C = 48;
+    static const int H = 7;
+    static const int W = 7;
+    static const int S = 5;
+    static const int R = 5;
+    static const int K = 128;
 
     static const int STRIDE = 1;
     static const int DILATION = 1;
-    static const int PADDING = 1;
+    static const int PADDING = 2;
 
     static constexpr float IA_MIN_VAL = 0.0;
     static constexpr float IA_MAX_VAL = 1.0;
-    static constexpr float IA_SPARSITY = 0.7;
+    static constexpr float IA_SPARSITY = 0.55;
 
     static constexpr float FW_MIN_VAL = 0.0;
     static constexpr float FW_MAX_VAL = 1.0;
-    static constexpr float FW_SPARSITY = 0.62;
+    static constexpr float FW_SPARSITY = 0.65;
 };
 
 }

@@ -2,6 +2,7 @@
 #include "tensor.h"
 #include "loader.h"
 #include <iostream>
+#include <cmath>
 
 
 namespace Scnn {
@@ -111,7 +112,7 @@ namespace Scnn {
         }
         
         // 2. Calculate Tile Dimensions
-        int grid_dim = 8; // sqrt(64)
+        int grid_dim = std::sqrt(HardwareConfig::NUM_PE);
         int h_chunk = (tensor.dims.h + grid_dim - 1) / grid_dim;
         int w_chunk = (tensor.dims.w + grid_dim - 1) / grid_dim;
         
@@ -158,7 +159,7 @@ namespace Scnn {
         }
         
         // 2. Calculate Tile Dimensions
-        int grid_dim = 8; // sqrt(64)
+        int grid_dim = std::sqrt(HardwareConfig::NUM_PE);
         int h_chunk = (tensor.dims.h + grid_dim - 1) / grid_dim;
         int w_chunk = (tensor.dims.w + grid_dim - 1) / grid_dim;
         

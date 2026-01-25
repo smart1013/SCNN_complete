@@ -21,6 +21,7 @@ namespace Scnn {
     int BufferQueue::get_bank_id(int k, int y, int x) {
         // Use prime number mixing and XOR to distribute accesses uniformly across banks.
         // This avoids collisions from simple patterns in stride or sequential access.
+
         unsigned int h = (k * 73856093) ^ (y * 19349663) ^ (x * 83492791);
         return h % num_banks;
     }
