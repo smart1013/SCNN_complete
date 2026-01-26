@@ -113,7 +113,6 @@ namespace Scnn {
                 psum.value = ia.value * w.value;
                 psum.addr = std::make_tuple(k_out, y_out, x_out);
                 
-                // std::cout << "Value: " << psum.value << ", Addr: " << "(" << k_out << ", " << y_out << ", " << x_out << ")" << std::endl;
                 int_latch.push_back(psum);
             }
         }
