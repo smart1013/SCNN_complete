@@ -24,18 +24,26 @@ This simulator provides a detailed look at the hardware pipeline, tracking:
 ```text
 scnn_complete/
 ├── top.cc                 # Main entry point: drives the simulation loop and collects stats
-├── verify_top.cc          # Verification suite (optional)
+├── verify_top.cc          # Verification suite for cycle-accurate correctness
 ├── Makefile               # Build configuration
+├── README.md              # Project documentation
 ├── include/               # Header files
-│   ├── common.h           # Global Hardware & Layer configuration
-│   ├── tensor.h           # Tensor data structure definition
-│   └── ...
+│   ├── accumulator.h      # Accumulator class definition
+│   ├── buffer_queue.h     # BufferQueue class for storing partial sums
+│   ├── common.h           # Global Hardware & Layer configuration parameters
+│   ├── convlayer.h        # ConvLayer class for managing IA/FW/OA tensors
+│   ├── dispatcher.h       # Dispatcher class for instruction/data feed
+│   ├── loader.h           # Loader class for data compression and tiling
+│   ├── mult_array.h       # MultArray class for PE multiplier grid
+│   └── tensor.h           # Tensor class definition (3D/4D support)
 └── src/                   # Implementation files
-    ├── loader.cc          # Handles sparsity compression & tiling
-    ├── dispatcher.cc      # Feeds data to compute units
-    ├── mult_array.cc      # Simulates the multiplier grid
-    ├── accumulator.cc     # Post-processing & Output generation
-    └── ...
+    ├── accumulator.cc     # Logic for accumulating partial sums into final output
+    ├── buffer_queue.cc    # Implementation of partial sum queue management
+    ├── convlayer.cc       # Initialization and management of layer tensors
+    ├── dispatcher.cc      # Logic for fetching and dispatching vectors
+    ├── loader.cc          # Handles sparsity compression, tiling, and PE mapping
+    ├── mult_array.cc      # Simulates the Cartesian Product multiplier array
+    └── tensor.cc          # Tensor operations (addressing, value retrieval)
 ```
 
 ## 🛠️ Getting Started
